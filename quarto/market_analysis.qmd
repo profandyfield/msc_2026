@@ -10,14 +10,14 @@ format: html
 library(tidyverse)
 
 # filter courses by these keywords
-keywords <- c("Biotechnology", "Total", "Business", "Finance", "Financial", "Fintech", "Journalism", "Law", "Mathematics", "Petroleum", "Pharmacology", "Management") 
+keywords <- c("Biotechnology", "Total", "Business", "Engineering", "Environmental", "Finance", "Financial", "Fintech", "Geo-Energy", "Journalism", "Law", "Mathematics", "Petroleum", "Pharmacology", "Management") 
 pattern <- str_c("\\b(", str_c(keywords, collapse = "|"), ")\\b")
 
 # grab and wrangle data
 msc_tib <- here::here("data/competing_mscs.xlsx") |> 
   readxl::read_xlsx(skip = 2,
                     col_names = c("provider", "course", "20/21", "21/22", "22/23", "23/24", "24/25")) |> 
-  filter(!str_detect(course, pattern)) |> 
+  filter(!str_detect(course, pattern) & !is.na(n)) |> 
   pivot_longer(
     cols = `20/21`:`24/25`,
     names_to = "year",
