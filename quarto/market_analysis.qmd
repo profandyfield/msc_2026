@@ -7,22 +7,24 @@ format: html
 ```{r}
 #| label: setup
 
+library(DT)
 library(tidyverse)
 
 # filter courses by these keywords
-keywords <- c("Biotechnology", "Total", "Business", "Engineering", "Environmental", "Finance", "Financial", "Fintech", "Geo-Energy", "Journalism", "Law", "Mathematics", "Petroleum", "Pharmacology", "Management") 
+keywords <- c("Accounting", "Actuarial", "Algorithms", "Biology", "Biotechnology", "Biological", "Biomedical", "Bus", "Business", "Communicat", "Computing", "Ecology", "Econ", "Economics", "ECONOMICS", "Energy", "Engineering", "Environ", "Environment", "Environmental", "Finance", "Financial", "Fintech", "Genom", "Genomics", "Geo-Energy", "Geographic", "Journalism", "Law", "Management", "Marketing", "Mrkting", "Mathematics", "Media", "Narrative", "Networking", "Petroleum", "Pharmacology", "Politics", "Privacy", "Protection", "Satellite", "Security", "Total", "Transport") 
 pattern <- str_c("\\b(", str_c(keywords, collapse = "|"), ")\\b")
 
 # grab and wrangle data
 msc_tib <- here::here("data/competing_mscs.xlsx") |> 
   readxl::read_xlsx(skip = 2,
                     col_names = c("provider", "course", "20/21", "21/22", "22/23", "23/24", "24/25")) |> 
-  filter(!str_detect(course, pattern) & !is.na(n)) |> 
+  filter(!str_detect(course, pattern)) |> 
   pivot_longer(
     cols = `20/21`:`24/25`,
     names_to = "year",
     values_to = "n"
-  )
+  ) |> 
+  filter(!is.na(n))
 
 ```
 
